@@ -1,21 +1,17 @@
+import os
 import mip
 import networkx
 from matplotlib import pyplot
 
-n1 = 1000
-n2 = 2000
-g = networkx.complete_bipartite_graph(n1, n2)
-networkx.drawing.draw_networkx(g)
-pyplot.show()
+g = networkx.to_undirected(networkx.read_edgelist(os.path.join("data", "Email-Enron.txt")))
+n = len(g.nodes)
 
 model = mip.Model("Independent Set")
-x = [model.add_var(var_type=mip.BINARY) for _ in range(len(g.nodes))]
-model.objective = mip.maximize(mip.xsum(x[i] for i in range(len(g.nodes))))
+x = [model.add_var(var_type=mip.BINARY) for _ in range(n)]
+model.objective = mip.maximize(mip.xsum(x[i] for i in range(n)))
 for (i, j) in g.edges:
-	model += mip.xsum([x[i], x[j]]) <= 1
+	model += mip.xsum([x[int(i)], x[int(j)]]) <= 1
 model.optimize()
-selected = [i for i in range(len(g.nodes)) if x[i].x >= 0.99]
-print(selected)
+selected = [i for i in range(n) if x[i].x >= 0.99]
 g1 = g.subgraph(selected)
-networkx.drawing.draw_networkx(g1)
-pyplot.show()
+print(selected)
