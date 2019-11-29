@@ -1,8 +1,10 @@
 import mip
 import networkx
-from matplotlib import pyplot
 
-g = networkx.to_undirected(networkx.read_edgelist(os.path.join("data", "Email-Enron.txt")))
+n1 = 2 ** 10
+n2 = 2 ** 11
+
+g = networkx.to_undirected(networkx.complete_bipartite_graph(n1, n2))
 n = len(g.nodes)
 
 model = mip.Model("Clique")
