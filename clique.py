@@ -1,8 +1,8 @@
 import mip
 import networkx
 
-n1 = 2 ** 10
-n2 = 2 ** 11
+n1 = 2 ** 8
+n2 = 2 ** 9
 
 g = networkx.to_undirected(networkx.complete_bipartite_graph(n1, n2))
 n = len(g.nodes)
